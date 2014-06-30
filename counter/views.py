@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect
+import json
+
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader
@@ -28,9 +30,9 @@ def reset(request, event_id):
         e.save()
     except Exception as ex:
         # Redisplay the event detail form.
-        return render(request, 'counter/detail.html', {
-            'event': e,
+        return HttpResponse({
+            'event_id': e.id,
             'error_message': ex,
         })
 
-    return HttpResponseRedirect(reverse('counter:detail', args=(e.id,)))
+    return HttpResponse(json.dumps({'event_id':e.id}))
