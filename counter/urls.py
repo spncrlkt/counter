@@ -8,4 +8,6 @@ urlpatterns = patterns('',
     url(r'^(?P<event_id>\d+)/reset/$', views.reset, name='reset'),
     url(r'^add/$', views.add, name='add'),
     url(r'^register/$', views.register, name='register'),
+    url(r'^login/$', views.user_login, name='user_login'),
+    url(r'^logout/$', views.user_logout, name='user_logout'),
 )

@@ -12,7 +12,12 @@
 
 <body>
 <div id="content">
-    <a href="/counter/"> HOME </a> | <a href="/counter/register/">Register Here</a>
+    <a href="/counter/"> HOME </a> | 
+    {% if user.is_authenticated %}
+        <a href="/counter/logout/">Logout</a>
+    {% else %}
+        <a href="/counter/login/">Login</a> | <a href="/counter/register/">Register Here</a>
+    {% endif %}
     {% block content %}{% endblock %}
 </div>
 </body>
