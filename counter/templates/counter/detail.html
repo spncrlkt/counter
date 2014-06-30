@@ -1,8 +1,5 @@
-
-<!-- -->
-<!-- -->
-<!-- -->
-
+{% extends "base.html" %}
+{% block content %}
 <h1>{{ event.name }}</h1>
 
 <ul>
@@ -10,11 +7,6 @@
     {% if event.last_updated_time %} 
         <li> {{ event.last_updated_time }} : by {{ event.last_updated_by.username }}</li> 
     {% endif %}
+    <button class='reset' data='{{ event.id }}'>RESET</button>
 </ul>
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'counter:reset' event.id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" name="reset" id="reset">
-</form>
+{% endblock %}
