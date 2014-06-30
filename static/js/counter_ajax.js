@@ -18,7 +18,27 @@ $(document).ready(function () {
             //$('#timer').show();
             $('#updated').show().fadeOut();
         });
+    });
 
+    $('form#add_event').submit(function(event) {
+        var that =$(this);
+        var event_id = that.attr('data');
+        var csrf_token = that.attr('csrf_token');
+        $.ajax({
+            beforeSend: function(xhr, settings) {
+                if (!this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            },
+            type: "POST",
+            url: '/counter/add/',
+            data: that.serialize(),
+        })
+         .done(function(data) {
+            //$('#timer').show();
+            $('#added').show().fadeOut();
+        });
 
+        event.preventDefault();
     });
 })

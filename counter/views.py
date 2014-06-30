@@ -18,6 +18,22 @@ def detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'counter/detail.html', {'event': event})
 
+def add(request):
+    ## Get authed user
+    u = get_object_or_404(User, username='sliechty')
+    
+    name = request.POST['event_name']
+    e = Event(owner=u, name=name)
+    try:
+        e.save()
+    except Exception as ex:
+        # return error
+        return HttpResponse(json.dumps({
+            'error_message': ex,
+        }))
+        
+    return HttpResponse(json.dumps({'event_id':e.id}))
+
 def reset(request, event_id):
     e = get_object_or_404(Event, pk=event_id)
     ## Get authed user
@@ -29,10 +45,10 @@ def reset(request, event_id):
         e.last_udated_time = timezone.now
         e.save()
     except Exception as ex:
-        # Redisplay the event detail form.
-        return HttpResponse({
+        # return error
+        return HttpResponse(json.dumps({
             'event_id': e.id,
             'error_message': ex,
-        })
+        }))
 
     return HttpResponse(json.dumps({'event_id':e.id}))
