@@ -10,18 +10,19 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from counter.forms import UserForm
-from counter.models import Event
+from counter.models import Event, EventLog
 
 def index(request):
     current_user = request.user
-    event_list = Event.objects.filter(owner_id=current_user.id).order_by('-last_updated_time')[:5]
+    event_list = Event.objects.filter(owner_id=current_user.id).order_by('-last_updated_time')
     context = {'event_list': event_list}
     return render(request, 'counter/index.html', context)
 
 @login_required
 def detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render(request, 'counter/detail.html', {'event': event})
+    event_log = EventLog.objects.filter(event_id=event.id).order_by('-updated_time')[:5]
+    return render(request, 'counter/detail.html', {'event': event, 'event_log': event_log})
 
 @login_required
 def add(request):
@@ -50,6 +51,9 @@ def reset(request, event_id):
         e.last_updated_by = u
         e.last_udated_time = timezone.now
         e.save()
+
+        log = EventLog(event=e, updated_time=timezone.now, updated_by=u)
+        log.save()
     except Exception as ex:
         # return error
         return HttpResponse(json.dumps({

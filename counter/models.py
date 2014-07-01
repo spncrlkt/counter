@@ -53,3 +53,11 @@ class Event(models.Model):
 
     def __unicode__(self): 
         return self.owner.username + ": " + self.name
+
+class EventLog(models.Model):
+    event = models.ForeignKey(Event)
+    updated_time = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(User)
+
+    def __unicode__(self): 
+        return self.updated_by.username + ": " + self.updated_time

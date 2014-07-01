@@ -7,7 +7,17 @@
     {% if event.last_updated_time  and event.last_updated_by %} 
         <li> {{ event.last_updated_time }}: by {{ event.last_updated_by.username }}</li> 
     {% endif %}
-    <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
-    <div id='updated' style='display:none;'>UPDATED</div>
 </ul>
+
+<button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
+<div id='updated' style='display:none;'>UPDATED</div>
+<div id="event_log">
+    <ul>
+    {% for entry in event_log %}
+        {% if entry.updated_time  and entry.updated_by %} 
+            <li>{{ entry.updated_time }}: by {{ entry.updated_by.username }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
 {% endblock %}
