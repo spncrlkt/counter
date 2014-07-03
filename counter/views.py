@@ -65,6 +65,34 @@ def reset(request, event_id):
 
     return HttpResponse(json.dumps({'event_id':e.id}))
 
+@login_required
+def add_permission(request, event_id):
+    # Get objects from request
+    u = request.user
+    grantee_email = request.POST['grantee_email']
+    e = Event.objects.get(id=event_id)
+
+    try:
+        grantee_u = User.objects.get(email=grantee_email)
+    except User.DoesNotExist: 
+        # Instead need to send join up email to unsigned up user
+        return HttpResponse(json.dumps({'status':'sent'}))
+        
+    if e and grantee_u:
+        try:
+            ep = EventPermission(granter=u, grantee=grantee_u, event=e, status='s')
+            ep.save()
+        except Exception as ex:
+            # return error
+            return HttpResponse(json.dumps({
+                'error_message': ex.message,
+            }))
+        
+    return HttpResponse(json.dumps({'status':'sent'}))
+
+######################
+# Bullshitty auth code
+######################
 
 def register(request):
     context = RequestContext(request)
@@ -109,10 +137,8 @@ def user_login(request):
     else:
         return render_to_response('counter/login.html', {}, context)
 
-
-
-
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/counter/')
+
