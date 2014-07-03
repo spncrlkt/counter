@@ -61,3 +61,13 @@ class EventLog(models.Model):
 
     def __unicode__(self): 
         return self.updated_by.username + ": " + self.updated_time
+
+class EventPermission(models.Model):
+    event = models.ForeignKey(Event)
+    granter = models.ForeignKey(User, related_name='event_permission_granter')
+    grantee = models.ForeignKey(User, related_name='event_permission_grantee')
+    STATUSES = (
+        ('s','sent'),
+        ('a','accepted'),
+    )
+    status = models.CharField(max_length=1, choices=STATUSES)

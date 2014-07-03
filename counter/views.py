@@ -10,11 +10,13 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from counter.forms import UserForm
-from counter.models import Event, EventLog
+from counter.models import Event, EventLog, EventPermission
 
 def index(request):
     current_user = request.user
-    event_list = Event.objects.filter(owner_id=current_user.id).order_by('-last_updated_time')
+    own_events = Event.objects.filter(owner_id=current_user.id).order_by('-last_updated_time')
+    others_events = Event.objects.filter(eventpermission__grantee_id=current_user.id).filter(eventpermission__status='a').order_by('-last_updated_time')
+    event_list = own_events | others_events
     context = {'event_list': event_list}
     return render(request, 'counter/index.html', context)
 
