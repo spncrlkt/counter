@@ -70,7 +70,7 @@ def add_permission(request, event_id):
     # Get objects from request
     u = request.user
     grantee_email = request.POST['grantee_email']
-    e = Event.objects.get(id=event_id)
+    e = Event.objects.select_related().get(id=event_id)
 
     try:
         grantee_u = User.objects.get(email=grantee_email)
@@ -78,7 +78,7 @@ def add_permission(request, event_id):
         # Instead need to send join up email to unsigned up user
         return HttpResponse(json.dumps({'status':'sent'}))
         
-    if e and grantee_u:
+    if e and grantee_u and e.owner.id == u.id:
         try:
             ep = EventPermission(granter=u, grantee=grantee_u, event=e, status='s')
             ep.save()
