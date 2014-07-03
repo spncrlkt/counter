@@ -20,11 +20,13 @@
     {% endfor %}
     </ul>
 </div>
-<div id='add_event_permission_container'>
-    <form id='add_event_permission' event_id='{{ event.id }}' csrf_token="{{ csrf_token }}">
-        <input id='grantee_email' type='text' name='grantee_email'></input>
-        <button type='submit'>SEND REQUEST</input>
-    </form>
-    <div id='event_permission_sent' style='display:none;'>Request Sent</div>
-</div>
+{% if event.owner.id == user.id %}
+    <div id='add_event_permission_container'>
+        <form id='add_event_permission' event_id='{{ event.id }}' csrf_token="{{ csrf_token }}">
+            <input id='grantee_email' type='text' name='grantee_email'></input>
+            <button type='submit'>SEND REQUEST</input>
+        </form>
+        <div id='event_permission_sent' style='display:none;'>Request Sent</div>
+    </div>
+{% endif %}
 {% endblock %}
