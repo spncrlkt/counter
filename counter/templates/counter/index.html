@@ -8,7 +8,7 @@
             <a href="{% url 'counter:detail' event.id %}">{{ event.name }}</a>
             <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
             {% if event.last_updated_time  and event.last_updated_by %} 
-                {{ event.last_updated_time }}: by {{ event.last_updated_by.username }} 
+                <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} 
             {% endif %}
             </li>
         {% endfor %}

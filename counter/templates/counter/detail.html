@@ -2,12 +2,10 @@
 {% block content %}
 <h1>{{ event.name }}</h1>
 
-<ul>
-    <li>{{ event.owner }}</li>
-    {% if event.last_updated_time  and event.last_updated_by %} 
-        <li> {{ event.last_updated_time }}: by {{ event.last_updated_by.username }}</li> 
-    {% endif %}
-</ul>
+<div>Owner: {{ event.owner }}</div>
+{% if event.last_updated_time  and event.last_updated_by %} 
+    <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} 
+{% endif %}
 
 <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
 <div id='updated' style='display:none;'>UPDATED</div>
@@ -15,7 +13,7 @@
     <ul>
     {% for entry in event_log %}
         {% if entry.updated_time  and entry.updated_by %} 
-            <li>{{ entry.updated_time }}: by {{ entry.updated_by.username }}</li>
+            <li><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {{ entry.updated_by.username }}</li>
         {% endif %}
     {% endfor %}
     </ul>
