@@ -57,8 +57,10 @@ $(document).ready(function () {
             type: "POST",
             url: '/counter/add/',
             data: that.serialize(),
+            dataType: "json",
         })
          .done(function(data) {
+            window.location = "/counter/" + data.event_id + "/";
         });
 
         event.preventDefault();
