@@ -26,6 +26,8 @@ $(document).ready(function () {
             var updaterSpan = that.parent().find('span.updater');
             updateUpdaterSpan(updaterSpan);
 
+            $('#by').show();
+
             if ($('ul#event_log')) {
                 addEventLog()
             }
