@@ -15,10 +15,22 @@ $(document).ready(function () {
             data: {'event_id':event_id},
         })
          .done(function(data) {
-            //$('#timer').show();
-            $('#updated').show().fadeOut();
+            var grandparentLi = that.parent().parent();
+            var parentLi = that.parent().detach();
+            grandparentLi.prepend(parentLi);
+
+            var timer = that.parent().find('span.event_timer');
+            resetDateTime(timer);
+            updateDateTimeText(timer);
+
+            var updaterSpan = that.parent().find('span.updater');
+            updateUpdaterSpan(updaterSpan);
         });
     });
+
+    var updateUpdaterSpan = function(updaterSpan) {
+        updaterSpan.text($('#user-name').attr('data'));
+    }
 
     $('form#add_event').submit(function(event) {
         var that =$(this);
@@ -34,8 +46,6 @@ $(document).ready(function () {
             data: that.serialize(),
         })
          .done(function(data) {
-            //$('#timer').show();
-            $('#added').show().fadeOut();
         });
 
         event.preventDefault();
@@ -56,8 +66,6 @@ $(document).ready(function () {
             data: that.serialize(),
         })
          .done(function(data) {
-            //$('#timer').show();
-            $('#event_permission_sent').show().fadeOut();
         });
 
         event.preventDefault();
@@ -78,8 +86,6 @@ $(document).ready(function () {
             data: { 'invite_id':invite_id },
         })
          .done(function(data) {
-            //$('#timer').show();
-            $('#invite_accepted').show().fadeOut();
         });
 
         event.preventDefault();
@@ -115,14 +121,21 @@ $(document).ready(function () {
         return date_diff_text;
     }
 
-    $('span.event_timer').each(function(index, element) {
-        $el = $(element);
-        var event_id = $el.attr('event-id');
+    var updateDateTimeText = function($el) {
         var updated_date = $el.attr('updated-date');
-
         var updatedDateObject = new Date(Date.parse(updated_date));
         var nowDateObject = new Date();
         $el.text(getDateDiffText(nowDateObject.getTime()-updatedDateObject.getTime()));
+    }
+
+    var resetDateTime = function($el) {
+        var nowDateObject = new Date();
+        $el.attr('updated-date', nowDateObject.toISOString())
+    }
+
+    $('span.event_timer').each(function(index, element) {
+        $el = $(element);
+        updateDateTimeText($el);
     });
 
     var time_zone = jstz.determine().name();

@@ -1,43 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-    {% if event_list %}
-        <div id='updated' style='display:none;'>UPDATED</div>
-        <ul>
-        {% for event in event_list %}
-            <li>
-            <a href="{% url 'counter:detail' event.id %}">{{ event.name }}</a>
-            <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
-            {% if event.last_updated_time  and event.last_updated_by %} 
-                <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} 
-            {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No events are available.</p>
-    {% endif %}
+
+<div id='updated' style='display:none;'>UPDATED</div>
+<div id='user-name' data='{{ user.username }}' style='display:none;'></div>
+<ul id='event_list'>
+{% if event_list %}
+    {% for event in event_list %}
+        <li>
+        <a href="{% url 'counter:detail' event.id %}">{{ event.name }}</a>
+        <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
+        {% if event.last_updated_time  and event.last_updated_by %} 
+            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by <span id='updater_{{ event.id }}' class="updater">{{ event.last_updated_by.username }}</span> 
+        {% endif %}
+        </li>
+    {% endfor %}
+{% else %}
+    <p>No events are available.</p>
+{% endif %}
+</ul>
 
 
-    {% if user.is_authenticated %}
-        <div id='add_event_container'>
-            <form id='add_event' csrf_token="{{ csrf_token }}">
-                <input id='event_name' type='text' name='event_name'></input>
-                <button type='submit'>ADD</input>
-            </form>
-            <div id='added' style='display:none;'>ADDED</div>
-        </div>
-    {% endif %}
+{% if user.is_authenticated %}
+    <div id='add_event_container'>
+        <form id='add_event' csrf_token="{{ csrf_token }}">
+            <input id='event_name' type='text' name='event_name'></input>
+            <button type='submit'>ADD</input>
+        </form>
+        <div id='added' style='display:none;'>ADDED</div>
+    </div>
+{% endif %}
 
-    {% if unaccepted_invites|length > 0 %}
-        <div id='invite_accepted' style='display:none;'>INVITE ACCEPTED</div>
-        <ul>
-        {% for invite in unaccepted_invites %}
-            <li>
-            Event Name: {{ invite.event.name }} Invited by: {{ invite.granter.username }}
-            <button csrf_token="{{ csrf_token }}" class='accept_invite' data='{{ invite.id }}'>ACCEPT</button>
-            </li>
-        {% endfor %}
-        </ul>
-    {% endif %}
+{% if unaccepted_invites|length > 0 %}
+    <div id='invite_accepted' style='display:none;'>INVITE ACCEPTED</div>
+    <ul>
+    {% for invite in unaccepted_invites %}
+        <li>
+        Event Name: {{ invite.event.name }} Invited by: {{ invite.granter.username }}
+        <button csrf_token="{{ csrf_token }}" class='accept_invite' data='{{ invite.id }}'>ACCEPT</button>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
 
 {% endblock %}

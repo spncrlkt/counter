@@ -3,12 +3,9 @@
 <h1>{{ event.name }}</h1>
 
 <div>Owner: {{ event.owner }}</div>
-{% if event.last_updated_time  and event.last_updated_by %} 
-    <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} 
-{% endif %}
-
-<button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
-<div id='updated' style='display:none;'>UPDATED</div>
+<ul id='reset'>
+    <li><span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button> </li>
+</ul>
 <div id="event_log">
     <ul>
     {% for entry in event_log %}
