@@ -28,7 +28,7 @@
         </div>
     {% endif %}
 
-    {% if unaccepted_invites.count > 0 %}
+    {% if unaccepted_invites|length > 0 %}
         <div id='invite_accepted' style='display:none;'>INVITE ACCEPTED</div>
         <ul>
         {% for invite in unaccepted_invites %}
