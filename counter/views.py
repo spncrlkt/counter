@@ -14,10 +14,17 @@ from counter.models import Event, EventLog, EventPermission
 
 def index(request):
     current_user = request.user
+
     own_events = Event.objects.filter(owner_id=current_user.id).order_by('-last_updated_time')
     others_events = Event.objects.filter(eventpermission__grantee_id=current_user.id).filter(eventpermission__status='a').order_by('-last_updated_time')
     event_list = own_events | others_events
-    context = {'event_list': event_list}
+
+    unaccepted_invites = EventPermission.objects.select_related().filter(grantee_id=current_user.id).filter(status='s')
+
+    context = {
+        'event_list': event_list,
+        'unaccepted_invites': unaccepted_invites,
+    }
     return render(request, 'counter/index.html', context)
 
 @login_required
@@ -89,6 +96,25 @@ def add_permission(request, event_id):
             }))
         
     return HttpResponse(json.dumps({'status':'sent'}))
+
+@login_required
+def accept_invite(request):
+    ## Get authed user
+    u = request.user
+
+    invite_id = request.POST['invite_id']
+
+    try:
+        ep = EventPermission.objects.get(pk=invite_id)
+        ep.status = 'a';
+        ep.save()
+    except Exception as ex:
+        # return error
+        return HttpResponse(json.dumps({
+            'error_message': ex,
+        }))
+
+    return HttpResponse(json.dumps({'status':'accepted'}))
 
 ######################
 # Bullshitty auth code

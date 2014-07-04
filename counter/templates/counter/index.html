@@ -27,4 +27,17 @@
             <div id='added' style='display:none;'>ADDED</div>
         </div>
     {% endif %}
+
+    {% if unaccepted_invites.count > 0 %}
+        <div id='invite_accepted' style='display:none;'>INVITE ACCEPTED</div>
+        <ul>
+        {% for invite in unaccepted_invites %}
+            <li>
+            Event Name: {{ invite.event.name }} Invited by: {{ invite.granter.username }}
+            <button csrf_token="{{ csrf_token }}" class='accept_invite' data='{{ invite.id }}'>ACCEPT</button>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
 {% endblock %}

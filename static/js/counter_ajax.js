@@ -62,4 +62,26 @@ $(document).ready(function () {
 
         event.preventDefault();
     });
+
+    $('button.accept_invite').click(function(event) {
+        var that =$(this);
+        var invite_id = that.attr('data');
+        var csrf_token = that.attr('csrf_token');
+        $.ajax({
+            beforeSend: function(xhr, settings) {
+                if (!this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            },
+            type: "POST",
+            url: '/counter/accept_invite/',
+            data: { 'invite_id':invite_id },
+        })
+         .done(function(data) {
+            //$('#timer').show();
+            $('#invite_accepted').show().fadeOut();
+        });
+
+        event.preventDefault();
+    });
 })
