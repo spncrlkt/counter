@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>{{ event.name }}</h1>
+<div id='user-name' data='{{ user.username }}' style='display:none;'></div>
 
 <div>Owner: {{ event.owner }}</div>
 <ul id='reset'>
     <li><span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button> </li>
 </ul>
-<div id="event_log">
-    <ul>
+<div id="event_log_container">
+    <ul id='event_log'>
     {% for entry in event_log %}
         {% if entry.updated_time  and entry.updated_by %} 
             <li><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {{ entry.updated_by.username }}</li>

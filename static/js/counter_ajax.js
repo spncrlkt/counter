@@ -25,8 +25,21 @@ $(document).ready(function () {
 
             var updaterSpan = that.parent().find('span.updater');
             updateUpdaterSpan(updaterSpan);
+
+            if ($('ul#event_log')) {
+                addEventLog()
+            }
         });
     });
+
+    var addEventLog = function() {
+        var nowDateObject = new Date();
+        var updated_date = nowDateObject.toISOString();
+        var converted_date_time_string = moment(updated_date).tz(time_zone).format("MMM D YYYY, h:mma");
+        var user_name = $('#user-name').attr('data')
+        var event_li =  "<li><span id='log_time' class='log_time' updated-date=''>" + converted_date_time_string + "</span> by " + user_name + "</li>";
+        $("ul#event_log").prepend(event_li);
+    }
 
     var updateUpdaterSpan = function(updaterSpan) {
         updaterSpan.text($('#user-name').attr('data'));
