@@ -71,3 +71,6 @@ class EventPermission(models.Model):
         ('a','accepted'),
     )
     status = models.CharField(max_length=1, choices=STATUSES)
+
+    class Meta:
+        unique_together = ("event", "granter", "grantee")
