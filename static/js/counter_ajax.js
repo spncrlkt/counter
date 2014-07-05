@@ -15,18 +15,18 @@ $(document).ready(function () {
             data: {'event_id':event_id},
         })
          .done(function(data) {
-            var grandparentLi = that.parent().parent();
-            var parentLi = that.parent().detach();
-            grandparentLi.prepend(parentLi);
+            var parentUl = that.parents('ul');
+            var parentLi = that.parents('li').detach();
+            parentUl.prepend(parentLi);
 
-            var timer = that.parent().find('span.event_timer');
+            var timer = parentLi.find('span.event_timer');
             resetDateTime(timer);
             updateDateTimeText(timer);
 
-            var updaterSpan = that.parent().find('span.updater');
+            var updaterSpan = parentLi.find('span.updater');
             updateUpdaterSpan(updaterSpan);
 
-            $('#by').show();
+            parentLi.find('#by').show();
 
             if ($('ul#event_log')) {
                 addEventLog()
@@ -39,7 +39,7 @@ $(document).ready(function () {
         var updated_date = nowDateObject.toISOString();
         var converted_date_time_string = moment(updated_date).tz(time_zone).format("MMM D YYYY, h:mma");
         var user_name = $('#user-name').attr('data')
-        var event_li =  "<li><span id='log_time' class='log_time' updated-date=''>" + converted_date_time_string + "</span> by " + user_name + "</li>";
+        var event_li =  "<li class='list-group-item'><span id='log_time' class='log_time' updated-date=''>" + converted_date_time_string + "</span> by " + user_name + "</li>";
         $("ul#event_log").prepend(event_li);
     }
 
@@ -103,6 +103,7 @@ $(document).ready(function () {
             data: { 'invite_id':invite_id },
         })
          .done(function(data) {
+            window.location = window.location;
         });
 
         event.preventDefault();

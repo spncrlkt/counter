@@ -1,28 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ event.name }}</h1>
 <div id='user-name' data='{{ user.username }}' style='display:none;'></div>
 
-<div>Owner: {{ event.owner }}</div>
-<ul id='reset'>
-    <li><span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button> </li>
-</ul>
-<div id="event_log_container">
-    <ul id='event_log'>
-    {% for entry in event_log %}
-        {% if entry.updated_time  and entry.updated_by %} 
-            <li><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {{ entry.updated_by.username }}</li>
-        {% endif %}
-    {% endfor %}
-    </ul>
+<div class="page-header">
+  <h1> {{ event.name }} <small> Owned by {% if event.owner == user %} you {% else %} {{ event.owner }} {% endif %} </small> </h1>
 </div>
-{% if event.owner.id == user.id %}
-    <div id='add_event_permission_container'>
-        <form id='add_event_permission' event_id='{{ event.id }}' csrf_token="{{ csrf_token }}">
-            <input id='grantee_email' type='text' name='grantee_email'></input>
-            <button type='submit'>SEND REQUEST</input>
-        </form>
-        <div id='event_permission_sent' style='display:none;'>Request Sent</div>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Reset</h3>
+        <ul id='reset' class="list-unstyled">
+            <li>
+            <div class="row">
+                <!-- <button class="btn-sm btn-primary reset" csrf_token="{{ csrf_token }}" data='{{ event.id }}'> RESET </button> <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} -->
+                <div class="col-xs-3">
+                    <button csrf_token="{{ csrf_token }}" class='reset btn-sm btn-primary' data='{{ event.id }}'>RESET</button>
+                </div >
+                <div class="col-xs-9">
+                    <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }}
+                </div >
+            </div>
+            </li>
+        </ul>
     </div>
-{% endif %}
+    <div class="col-md-4">
+        <h3>Event logs</h3>
+        <div id="event_log_container">
+            <ul id='event_log' class="list-group">
+            {% for entry in event_log %}
+                {% if entry.updated_time  and entry.updated_by %} 
+                    <li class="list-group-item"><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {{ entry.updated_by.username }}</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-4">
+    {% if event.owner.id == user.id %}
+        <h3>Grant access to this event</h3>
+        <div id='add_event_permission_container'>
+            <form id='add_event_permission' event_id='{{ event.id }}' csrf_token="{{ csrf_token }}">
+                <input id='grantee_email' type='text' name='grantee_email'></input>
+                <button class="btn-sm btn-primary" type='submit'>SEND REQUEST</input>
+            </form>
+            <div id='event_permission_sent' style='display:none;'>Request Sent</div>
+        </div>
+    {% endif %}
+    </div>
 {% endblock %}

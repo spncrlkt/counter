@@ -3,45 +3,76 @@
 
 <div id='updated' style='display:none;'>UPDATED</div>
 <div id='user-name' data='{{ user.username }}' style='display:none;'></div>
-<ul id='event_list'>
-{% if event_list %}
-    {% for event in event_list %}
-        <li>
-        <a href="{% url 'counter:detail' event.id %}">{{ event.name }}</a>
-        <button csrf_token="{{ csrf_token }}" class='reset' data='{{ event.id }}'>RESET</button>
-        {% if event.last_updated_time  and event.last_updated_by %} 
-            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> <span id="by"> by </span> <span id='updater_{{ event.id }}' class="updater">{{ event.last_updated_by.username }}</span> 
+
+<div class="row">
+
+    <div class="col-md-4">
+        <h3>Your events</h3>
+        <ul id='event_list' class="list-group">
+        {% if event_list %}
+            {% for event in event_list %}
+                <li class="list-group-item">
+                <div class='row'>
+                    <div class="col-xs-3">
+                        <button csrf_token="{{ csrf_token }}" class='reset btn-sm btn-primary' data='{{ event.id }}'>RESET</button>
+                    </div >
+                    <div class="col-xs-9">
+                        <a href="{% url 'counter:detail' event.id %}">{{ event.name }}</a><br/>
+                        <small>
+                        {% if event.last_updated_time  and event.last_updated_by %} 
+                            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> <span id="by"> by </span> <span id='updater_{{ event.id }}' class="updater">{{ event.last_updated_by.username }}</span> 
+                        {% else %}
+                            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='0'></span> <span id="by" style='display:none;'> by </span> <span id='updater_{{ event.id }}' class="updater"></span> 
+                        {% endif %}
+                        </small>
+                    </div >
+                </div>
+                </li>
+            {% endfor %}
         {% else %}
-            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='0'></span> <span id="by" style='display:none;'> by </span> <span id='updater_{{ event.id }}' class="updater"></span> 
+            <p>No events are available.</p>
         {% endif %}
-        </li>
-    {% endfor %}
-{% else %}
-    <p>No events are available.</p>
-{% endif %}
-</ul>
-
-
-{% if user.is_authenticated %}
-    <div id='add_event_container'>
-        <form id='add_event' csrf_token="{{ csrf_token }}">
-            <input id='event_name' type='text' name='event_name'></input>
-            <button type='submit'>ADD</input>
-        </form>
-        <div id='added' style='display:none;'>ADDED</div>
+        </ul>
     </div>
-{% endif %}
 
-{% if unaccepted_invites|length > 0 %}
-    <div id='invite_accepted' style='display:none;'>INVITE ACCEPTED</div>
-    <ul>
-    {% for invite in unaccepted_invites %}
-        <li>
-        Event Name: {{ invite.event.name }} Invited by: {{ invite.granter.username }}
-        <button csrf_token="{{ csrf_token }}" class='accept_invite' data='{{ invite.id }}'>ACCEPT</button>
-        </li>
-    {% endfor %}
-    </ul>
-{% endif %}
+    <div class="col-md-4">
+        {% if user.is_authenticated %}
+        <h3>Add a new event</h3>
+            <div id='add_event_container'>
+                <form id='add_event' csrf_token="{{ csrf_token }}">
+                    <input id='event_name' type='text' name='event_name'></input>
+                    <button class="btn-sm btn-primary" type='submit'>ADD</input>
+                </form>
+                <div id='added' style='display:none;'>ADDED</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        {% if unaccepted_invites|length > 0 %}
+            <h3>Accept an invitation</h3>
+            <div id='invite_accepted' style='display:none;'>INVITE ACCEPTED</div>
+            <ul class="list-group">
+            {% for invite in unaccepted_invites %}
+                <li class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-3">
+                    <button csrf_token="{{ csrf_token }}" class='accept_invite btn-sm btn-primary' data='{{ invite.id }}'>ACCEPT</button>
+                    </div>
+                    <div class="col-xs-9">
+                    Event Name: {{ invite.event.name }} <br />Invited by: {{ invite.granter.username }}
+                    </div>
+                </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+</div>
+
+
+
+
 
 {% endblock %}
