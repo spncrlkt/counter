@@ -43,7 +43,7 @@ $(document).ready(function () {
     }
 
     var updateUpdaterSpan = function(updaterSpan) {
-        updaterSpan.text($('#user-name').attr('data'));
+        updaterSpan.text("you");
     }
 
     $('form#add_event').submit(function(event) {

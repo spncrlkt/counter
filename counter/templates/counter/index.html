@@ -20,7 +20,7 @@
                         <a href="{% url 'counter:detail' event.id %}">{{ event.name }}</a><br/>
                         <small>
                         {% if event.last_updated_time  and event.last_updated_by %} 
-                            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> <span id="by"> by </span> <span id='updater_{{ event.id }}' class="updater">{{ event.last_updated_by.username }}</span> 
+                            <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> <span id="by"> by </span> <span id='updater_{{ event.id }}' class="updater">{% if event.last_updated_by == user %} you {% else %} {{ event.last_updated_by.username}} {% endif %} </span> 
                         {% else %}
                             <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='0'></span> <span id="by" style='display:none;'> by </span> <span id='updater_{{ event.id }}' class="updater"></span> 
                         {% endif %}
