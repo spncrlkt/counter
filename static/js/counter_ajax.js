@@ -29,7 +29,7 @@ $(document).ready(function () {
             parentLi.find('#by').show();
 
             if ($('ul#event_log')) {
-                addEventLog()
+                addEventLog();
             }
         });
     });
@@ -38,8 +38,7 @@ $(document).ready(function () {
         var nowDateObject = new Date();
         var updated_date = nowDateObject.toISOString();
         var converted_date_time_string = moment(updated_date).tz(time_zone).format("MMM D YYYY, h:mma");
-        var user_name = $('#user-name').attr('data')
-        var event_li =  "<li class='list-group-item'><span id='log_time' class='log_time' updated-date=''>" + converted_date_time_string + "</span> by " + user_name + "</li>";
+        var event_li =  "<li class='list-group-item'><span id='log_time' class='log_time' updated-date=''>" + converted_date_time_string + "</span> by you </li>";
         $("ul#event_log").prepend(event_li);
     }
 
