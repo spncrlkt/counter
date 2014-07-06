@@ -11,12 +11,11 @@
         <ul id='reset' class="list-unstyled">
             <li>
             <div class="row">
-                <!-- <button class="btn-sm btn-primary reset" csrf_token="{{ csrf_token }}" data='{{ event.id }}'> RESET </button> <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }} -->
                 <div class="col-xs-3">
                     <button csrf_token="{{ csrf_token }}" class='reset btn-sm btn-primary' data='{{ event.id }}'>RESET</button>
                 </div >
                 <div class="col-xs-9">
-                    <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {{ event.last_updated_by.username }}
+                    <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {% if event.last_updated_by == user %} you {% else %} {{ event.last_updated_by.username }} {% endif %}
                 </div >
             </div>
             </li>
@@ -28,7 +27,7 @@
             <ul id='event_log' class="list-group">
             {% for entry in event_log %}
                 {% if entry.updated_time  and entry.updated_by %} 
-                    <li class="list-group-item"><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {{ entry.updated_by.username }}</li>
+                    <li class="list-group-item"><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {% if entry.updated_by == user %} you {% else %} {{ entry.updated_by.username }} {% endif %} </li>
                 {% endif %}
             {% endfor %}
             </ul>
