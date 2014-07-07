@@ -92,3 +92,5 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
+
+LOGIN_URL = '/counter/login'

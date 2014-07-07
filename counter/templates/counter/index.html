@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if user.is_authenticated %}
+
 <div id='updated' style='display:none;'>UPDATED</div>
 <div id='user-name' data='{{ user.username }}' style='display:none;'></div>
 
@@ -71,8 +73,10 @@
 
 </div>
 
-
-
-
+{% else %}
+    <h3>Oh Hey</h3>
+    This is a simple way to keep track of the tasks you do most frequently. You can share tasks and keep track of who's slacking and who's slaying it.
+    Go ahead and <a href="/counter/register/">register</a> or <a href="/counter/login/">login</a> 
+{% endif %}
 
 {% endblock %}
