@@ -126,22 +126,29 @@ def register(request):
     registered = False
 
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
 
-        if user_form.is_valid():
-            user = user_form.save()
+        user = User(email=email, username=username)
 
-            user.set_password(user.password)
+        try:
+            user.set_password(password)
             user.save()
-
             registered = True
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return HttpResponseRedirect('/counter/')
 
-    else:
-        user_form = UserForm()
+        except Exception as ex:
+            # return error
+            return HttpResponse(json.dumps({
+                'error_message': ex.message,
+            }))
 
     return render_to_response(
         'counter/register.html',
-        {'user_form': user_form, 'registered': registered},
+        {'registered': registered},
         context)
 
 def user_login(request):

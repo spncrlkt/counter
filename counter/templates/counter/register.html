@@ -1,16 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Register</h1>
 
-    {% if registered %}
-        <strong>thank you for registering!</strong>
-    {% else %}
-        <strong>Register</strong><br />
+<h1>Sign up!</h1>
 
-        <form id="user_form" method="post" action="/counter/register/" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ user_form.as_p }}
-            <input type="submit" name="submit" value="Register" />
-        </form>
-    {% endif %}
+{% if registered %}
+    <strong>Thank you for registering!</strong>
+{% else %}
+    <form id="user_form" role="form" method="post" action="/counter/register/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-default">Sign-Up!</button>
+    </form>
+{% endif %}
 {% endblock %}
