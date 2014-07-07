@@ -15,7 +15,11 @@
                     <button csrf_token="{{ csrf_token }}" class='reset btn-sm btn-primary' data='{{ event.id }}'>RESET</button>
                 </div >
                 <div class="col-xs-9">
-                    <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {% if event.last_updated_by == user %} you {% else %} {{ event.last_updated_by.username }} {% endif %}
+                    {% if event.last_updated_time  and event.last_updated_by %} 
+                        <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='{{ event.last_updated_time|date:"c" }}'></span> by {% if event.last_updated_by == user %} you {% else %} {{ event.last_updated_by.username }} {% endif %}
+                    {% else %}
+                        <span id='time_{{ event.id }}' class="event_timer" event-id='{{ event.id }}' updated-date='0'></span>
+                    {% endif %}
                 </div >
             </div>
             </li>
@@ -29,6 +33,8 @@
                 {% if entry.updated_time  and entry.updated_by %} 
                     <li class="list-group-item"><span id='log_time_{{ entry.id }}' class='log_time' updated-date='{{ entry.updated_time|date:"c" }}'></span> by {% if entry.updated_by == user %} you {% else %} {{ entry.updated_by.username }} {% endif %} </li>
                 {% endif %}
+            {% empty %}
+                    <li id="empty_event_log_message" class="list-group-item">No event logs available</li>
             {% endfor %}
             </ul>
         </div>

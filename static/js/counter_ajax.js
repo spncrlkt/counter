@@ -35,6 +35,9 @@ $(document).ready(function () {
     });
 
     var addEventLog = function() {
+        // Remove empty message if exists
+        var empty_event_log_message = $('#empty_event_log_message').remove();
+
         var nowDateObject = new Date();
         var updated_date = nowDateObject.toISOString();
         var converted_date_time_string = moment(updated_date).tz(time_zone).format("MMM D YYYY, h:mma");
@@ -140,9 +143,14 @@ $(document).ready(function () {
 
     var updateDateTimeText = function($el) {
         var updated_date = $el.attr('updated-date');
-        var updatedDateObject = new Date(Date.parse(updated_date));
-        var nowDateObject = new Date();
-        $el.text(getDateDiffText(nowDateObject.getTime()-updatedDateObject.getTime()));
+        if (updated_date === "0") {
+            $el.text("No updates for this event");
+        } else {
+            var updatedDateObject = new Date(Date.parse(updated_date));
+            var nowDateObject = new Date();
+            $el.text(getDateDiffText(nowDateObject.getTime()-updatedDateObject.getTime()));
+        }
+        return;
     }
 
     var resetDateTime = function($el) {
